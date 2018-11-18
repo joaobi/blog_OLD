@@ -10,7 +10,7 @@ This post is aimed at providing some additional background into the Plane Spotti
 Latest code is available [here](https://github.com/joaobi/planespotter).  
 There is a web demo available [here](http://planespotter-demo.azurewebsites.net/).
 
-The demo is composed of a website that allows you to upload the image of a plane and receive the same images with bounding boxes on the planes it detects and the airline they belong to.
+The demo is composed of a website that allows you to upload the image of a plane and receive the same image with bounding boxes around the planes it detects and the airline they belong to.
 
 ![Plane detection and Airline Classification](/blog/img/planes.jpg "Plane detection and Airline Classification")
 
