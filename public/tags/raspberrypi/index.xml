@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Raspberrypi on Joao Bilhim&#39;s (JB) blog</title>
+    <link>https://joaobi.github.io/blog/tags/raspberrypi/</link>
+    <description>Recent content in Raspberrypi on Joao Bilhim&#39;s (JB) blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 13 May 2017 15:49:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://joaobi.github.io/blog/tags/raspberrypi/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Setting up a Multi-Architecture Kubernetes Cluster</title>
+      <link>https://joaobi.github.io/blog/post/multiarchk8s/</link>
+      <pubDate>Sat, 13 May 2017 15:49:08 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/multiarchk8s/</guid>
+      <description>Introduction This post is based on the great work the Hypriot guys did (https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/).
+I extend their architecture to different architectures and address some of the issues with this.
+Deployment:
+   Servername IP Architecture OS Description     master 192.168.1.1 x86 Ubuntu HP MicroServer   node0 192.168.1.10 ARMV7 HypriotOS Raspberry Pi 3   node1 192.168.1.11 ARMV6 HypriotOS Raspberry Pi 2    Setup X86 Node (master) Install kubeadm sudo su - apt-get update &amp;amp;&amp;amp; apt-get install -y kubeadm  Bootstrap the kubernetes cluster kubeadm init --pod-network-cidr 10.</description>
+    </item>
+    
+  </channel>
+</rss>

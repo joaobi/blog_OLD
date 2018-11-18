@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Object Detection on Joao Bilhim&#39;s (JB) blog</title>
+    <link>https://joaobi.github.io/blog/tags/object-detection/</link>
+    <description>Recent content in Object Detection on Joao Bilhim&#39;s (JB) blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Nov 2018 21:35:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://joaobi.github.io/blog/tags/object-detection/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Building a Planespotting AI demo</title>
+      <link>https://joaobi.github.io/blog/post/planespotter/</link>
+      <pubDate>Sun, 18 Nov 2018 21:35:08 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/planespotter/</guid>
+      <description>Introduction This post is aimed at providing some additional background into the Plane Spotting Object Detection/Classification demo that I recently built and uploaded to GitHub.
+Latest code is available here.
+There is a web demo available here.
+The demo is composed of a website that allows you to upload the image of a plane and receive the same image with bounding boxes around the planes it detects and the airline they belong to.</description>
+    </item>
+    
+  </channel>
+</rss>

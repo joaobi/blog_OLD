@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Python on Joao Bilhim&#39;s (JB) blog</title>
+    <link>https://joaobi.github.io/blog/tags/python/</link>
+    <description>Recent content in Python on Joao Bilhim&#39;s (JB) blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 13 May 2017 11:10:12 +0800</lastBuildDate>
+    
+	<atom:link href="https://joaobi.github.io/blog/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hacking Azure Functions in Python</title>
+      <link>https://joaobi.github.io/blog/post/azfunctions/</link>
+      <pubDate>Sat, 13 May 2017 11:10:12 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/azfunctions/</guid>
+      <description>Caveat: Support for Python on Azure Functions is still experimental so, some of the steps below might not be applicable anymore.
+Overview Azure Functions allow running &amp;ldquo;serverless&amp;rdquo; code in the cloud (and more recently on-premises).
+I wanted to automate the capture of my running data so, this looked like an interesting scenario to try out Azure Functions.
+In a nutshell, I will be looking at:
+ Deployment of non-standard version of Python (3.</description>
+    </item>
+    
+  </channel>
+</rss>

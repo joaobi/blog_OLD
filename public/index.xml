@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Joao Bilhim&#39;s (JB) blog</title>
+    <link>https://joaobi.github.io/blog/</link>
+    <description>Recent content on Joao Bilhim&#39;s (JB) blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 18 Nov 2018 21:35:08 +0800</lastBuildDate>
+    
+	<atom:link href="https://joaobi.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Building a Planespotting AI demo</title>
+      <link>https://joaobi.github.io/blog/post/planespotter/</link>
+      <pubDate>Sun, 18 Nov 2018 21:35:08 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/planespotter/</guid>
+      <description>Introduction This post is aimed at providing some additional background into the Plane Spotting Object Detection/Classification demo that I recently built and uploaded to GitHub.
+Latest code is available here.
+There is a web demo available here.
+The demo is composed of a website that allows you to upload the image of a plane and receive the same image with bounding boxes around the planes it detects and the airline they belong to.</description>
+    </item>
+    
+    <item>
+      <title>Setting up a Multi-Architecture Kubernetes Cluster</title>
+      <link>https://joaobi.github.io/blog/post/multiarchk8s/</link>
+      <pubDate>Sat, 13 May 2017 15:49:08 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/multiarchk8s/</guid>
+      <description>Introduction This post is based on the great work the Hypriot guys did (https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/).
+I extend their architecture to different architectures and address some of the issues with this.
+Deployment:
+   Servername IP Architecture OS Description     master 192.168.1.1 x86 Ubuntu HP MicroServer   node0 192.168.1.10 ARMV7 HypriotOS Raspberry Pi 3   node1 192.168.1.11 ARMV6 HypriotOS Raspberry Pi 2    Setup X86 Node (master) Install kubeadm sudo su - apt-get update &amp;amp;&amp;amp; apt-get install -y kubeadm  Bootstrap the kubernetes cluster kubeadm init --pod-network-cidr 10.</description>
+    </item>
+    
+    <item>
+      <title>Hacking Azure Functions in Python</title>
+      <link>https://joaobi.github.io/blog/post/azfunctions/</link>
+      <pubDate>Sat, 13 May 2017 11:10:12 +0800</pubDate>
+      
+      <guid>https://joaobi.github.io/blog/post/azfunctions/</guid>
+      <description>Caveat: Support for Python on Azure Functions is still experimental so, some of the steps below might not be applicable anymore.
+Overview Azure Functions allow running &amp;ldquo;serverless&amp;rdquo; code in the cloud (and more recently on-premises).
+I wanted to automate the capture of my running data so, this looked like an interesting scenario to try out Azure Functions.
+In a nutshell, I will be looking at:
+ Deployment of non-standard version of Python (3.</description>
+    </item>
+    
+  </channel>
+</rss>

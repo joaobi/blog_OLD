@@ -1,0 +1,378 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Joao Bilhim&#39;s (JB) blog</title>
+        <meta name="author">
+        <meta name="description" content="The awesome blog of John Doe.">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="generator" content="Hugo 0.51" />
+        <link href="https://joaobi.github.io/blog/post/index.xml" rel="alternate" type="application/rss+xml" title="Joao Bilhim&#39;s (JB) blog" />
+        <link href="https://joaobi.github.io/blog/post/index.xml" rel="feed" type="application/rss+xml" title="Joao Bilhim&#39;s (JB) blog" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:400,300,700|Noto+Serif:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://joaobi.github.io/blog/css/styles.css">
+        <link rel="icon" href="https://joaobi.github.io/blog/favicon.ico">
+        <link rel="apple-touch-icon" href="https://joaobi.github.io/blog/apple-touch-icon.png" />
+        <link rel="stylesheet" href="https://joaobi.github.io/blog/css/highlightjs/monokai.css">
+        <script src="https://joaobi.github.io/blog/js/vendor/modernizr-2.8.0.min.js"></script>
+        
+        <style>
+        .site-header h2 .logo {
+        background: url(https://joaobi.github.io/blog/img/lights.png) no-repeat 0 0;
+        }
+        @media (min--moz-device-pixel-ratio: 1.3), (-o-min-device-pixel-ratio: 2.6 / 2), (-webkit-min-device-pixel-ratio: 1.3), (min-device-pixel-ratio: 1.3), (min-resolution: 1.3dppx) {
+          .site-header h2 .logo {
+            background-image: url(https://joaobi.github.io/blog/img/lights.png);
+        }}
+       .site-header {
+         background: #2a373d url(https://joaobi.github.io/blog/img/lights.png) no-repeat center center;
+         z-index: -1;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <header class="site-header">
+          <div class="transparent-layer">
+              <h2>Curiosity sparks growth</h2>
+          </div>
+        </header>
+
+
+<div class="container clearfix">
+    <main role="main" class="content">
+        <article class="post">
+            <a class="btn home" href="https://joaobi.github.io/blog/" title="">&laquo; </a>
+            
+<h1><a href="https://joaobi.github.io/blog/post/multiarchk8s/" title="Setting up a Multi-Architecture Kubernetes Cluster">Setting up a Multi-Architecture Kubernetes Cluster</a></h1>
+
+<footer class="post-info"> <span class="post-meta"><time datetime="2017.05.13">2017.05.13</time>
+
+    &middot; 
+        
+        <a href="https://joaobi.github.io/blog/tags/raspberrypi">raspberrypi</a>, 
+        
+        <a href="https://joaobi.github.io/blog/tags/kubernetes">kubernetes</a>
+        
+    
+
+</span>
+</footer>
+
+            
+
+<h1 id="introduction">Introduction</h1>
+
+<p>This post is based on the great work the Hypriot guys did (<a href="https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/">https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/</a>).</p>
+
+<p>I extend their architecture to different architectures and address some of the issues with this.</p>
+
+<p>Deployment:</p>
+
+<table>
+<thead>
+<tr>
+<th>Servername</th>
+<th>IP</th>
+<th align="center">Architecture</th>
+<th align="center">OS</th>
+<th align="center">Description</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>master</td>
+<td>192.168.1.1</td>
+<td align="center">x86</td>
+<td align="center">Ubuntu</td>
+<td align="center">HP MicroServer</td>
+</tr>
+
+<tr>
+<td>node0</td>
+<td>192.168.1.10</td>
+<td align="center">ARMV7</td>
+<td align="center">HypriotOS</td>
+<td align="center">Raspberry Pi 3</td>
+</tr>
+
+<tr>
+<td>node1</td>
+<td>192.168.1.11</td>
+<td align="center">ARMV6</td>
+<td align="center">HypriotOS</td>
+<td align="center">Raspberry Pi 2</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+
+<h1 id="setup-x86-node-master">Setup X86 Node (master)</h1>
+
+<h2 id="install-kubeadm">Install kubeadm</h2>
+
+<pre><code>sudo su -
+apt-get update &amp;&amp; apt-get install -y kubeadm
+</code></pre>
+
+<h2 id="bootstrap-the-kubernetes-cluster">Bootstrap the kubernetes cluster</h2>
+
+<pre><code>kubeadm init --pod-network-cidr 10.244.0.0/16
+</code></pre>
+
+<p><strong>IMPORTANT:</strong> Please note down the kubeadm join command that was output from the step above. This is the exact command you will run on each of the slave nodes later on.</p>
+
+<p>Validate your Deployment by running as a normal user:</p>
+
+<pre><code>sudo cp /etc/kubernetes/admin.conf $HOME/
+sudo chown $(id -u):$(id -g) $HOME/admin.conf
+export KUBECONFIG=$HOME/admin.conf
+
+kubectl get nodes
+</code></pre>
+
+<p>Remove taints from the master node</p>
+
+<pre><code>kubectl taint nodes --all node-role.kubernetes.io/master-
+</code></pre>
+
+<h2 id="setup-the-pod-network-driver">Setup the pod network driver</h2>
+
+<p>Install flannel and validate you got the pods up and running correctly:</p>
+
+<pre><code>kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel-rbac.yml
+kubectl create -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl --namespace=kube-system get pods
+</code></pre>
+
+<p>Test single node by deploying the hello minikube sample:</p>
+
+<pre><code>kubectl run hello-minikube --image=gcr.io/google_containers/echoserver:1.4 --port=8080
+kubectl expose deployment hello-minikube --type=NodePort
+kubectl get pod
+kubectl get svc hello-minikube
+curl 10.111.29.69:8080
+</code></pre>
+
+<p>You should expect the following output:</p>
+
+<p><img src="/blog/img/curlminikube.png" alt="curl output" title="curl output" /></p>
+
+<h2 id="setup-the-cluster-load-balancer">Setup the cluster load balancer</h2>
+
+<p>Install Traefik as the load balancer for our cluster. Please note that we have to use the rbac yaml file aswe are running  kubernetes 1.6+.</p>
+
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/containous/traefik/master/examples/k8s/traefik-with-rbac.yaml
+</code></pre>
+
+<h2 id="install-the-kubernetes-dashboard">Install the Kubernetes Dashboard</h2>
+
+<pre><code>$ kubectl create -f https://git.io/kube-dashboard
+</code></pre>
+
+<p>Test that you get the kubernetes dashboard page by acessing <a href="http://localhost:8001/ui">http://localhost:8001/ui</a> on your browser.</p>
+
+<p>You should see something like:</p>
+
+<p><img src="/blog/img/k8sdash.png" alt="k8s dashboard" title="k8s dashboard" /></p>
+
+<hr />
+
+<h1 id="setup-arm-nodes-slaves">Setup ARM Nodes (slaves)</h1>
+
+<p>Follow the process below for each one od the slave nodes (node0 and node1).</p>
+
+<p><strong>NOTICE:</strong> <em>Please start by flashing both Raspberry pi&rsquo;s with the HypriotOS and configured them with the above hostnames and IP addresses.</em></p>
+
+<h2 id="install-kubeadm-1">Install kubeadm</h2>
+
+<pre><code>sudo su -
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+echo &quot;deb http://apt.kubernetes.io/ kubernetes-xenial main&quot; &gt; /etc/apt/sources.list.d/kubernetes.list
+apt-get update &amp;&amp; apt-get install -y kubeadm
+</code></pre>
+
+<p>Remove KUBELET_NETWORK_ARGS from the kubeadm conf file</p>
+
+<pre><code>nano /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+</code></pre>
+
+<p>make sure the variable is no longer present in the current session.</p>
+
+<h2 id="pull-and-tag-the-kube-proxy-container-for-arm">Pull and tag the kube-proxy container for arm</h2>
+
+<p>This step is an hack required at the moment because the deployment of kube-proxy does not natively support mutli-architeture and thus, the nodes assume to be amd64 and try to get  the amd64 containter (like their master) instead of the required arm version.</p>
+
+<pre><code>docker pull gcr.io/google_containers/kube-proxy-arm:v1.6.2 
+docker tag gcr.io/google_containers/kube-proxy-arm:v1.6.2 gcr.io/google_containers/kube-proxy-amd64:v1.6.2
+</code></pre>
+
+<p>check that the right images are in the repository:</p>
+
+<pre><code>docker images
+</code></pre>
+
+<h2 id="join-the-cluster">Join the cluster</h2>
+
+<p>This command is the exact same one that was printed on the command line when we run kubeadm init on the master.</p>
+
+<p>An example would be:</p>
+
+<pre><code>kubeadm join --token sometoken  192.168.1.1:6443
+</code></pre>
+
+<hr />
+
+<h1 id="validate-cluster-deployment">Validate Cluster Deployment</h1>
+
+<p>Validate that both nodes were added correctly by running  on the master server:</p>
+
+<pre><code>kubectl get nodes
+</code></pre>
+
+<p>Validate all nodes have STATUS Ready:</p>
+
+<p><img src="/blog/img/getnodes.png" alt="All Nodes Ready" title="All Nodes Ready" /></p>
+
+<hr />
+
+<h1 id="reset-environment">Reset Environment</h1>
+
+<p>On the master server</p>
+
+<pre><code>kubectl drain node1 --delete-local-data --force --ignore-daemonsets
+kubectl delete node node1
+
+kubectl drain node0 --delete-local-data --force --ignore-daemonsets
+kubectl delete node node0
+</code></pre>
+
+<p>On each of the slave nodes</p>
+
+<pre><code>sudo su -
+kubeadm reset
+rm -rf .kube/
+rm -rf /var/lib/cni
+rm -rf /run/flannel
+rm -rf /etc/cni
+</code></pre>
+
+<p>Back on the master node</p>
+
+<pre><code>sudo su -
+kubeadm reset
+rm -rf .kube/
+rm -rf /var/lib/cni
+rm -rf /run/flannel
+rm -rf /etc/cni
+</code></pre>
+
+<hr />
+
+<h1 id="useful-debug-commands">Useful DEBUG commands</h1>
+
+<pre><code>sudo journalctl -xn -u kubelet.service
+kubectl get events
+/etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+kubectl --namespace=kube-system get pods
+kubectl get pods --show-labels
+kubectl get events
+kubectl describe node bilhimserver
+
+kubectl --namespace=kube-system logs kube-flannel-ds-cpv9b kube-flannel
+</code></pre>
+
+<hr />
+
+<h1 id="resources">Resources</h1>
+
+<p>Hypriot raspberry pi kubernetes cluster setup - <a href="https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/">https://blog.hypriot.com/post/setup-kubernetes-raspberry-pi-cluster/</a></p>
+
+<p>Kubernetes Dashboard Deployment - <a href="https://github.com/kubernetes/dashboard#kubernetes-dashboard">https://github.com/kubernetes/dashboard#kubernetes-dashboard</a></p>
+
+<p>Flannel - <a href="https://github.com/coreos/flannel">https://github.com/coreos/flannel</a></p>
+
+<p>Traefik - <a href="https://docs.traefik.io/user-guide/kubernetes/">https://docs.traefik.io/user-guide/kubernetes/</a></p>
+
+            <ul class="share-buttons">
+    <li></li>
+    <li>
+        <a class="icon-facebook-squared" href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fjoaobi.github.io%2fblog%2fpost%2fmultiarchk8s%2f" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-twitter" href="https://twitter.com/share?text=Setting%20up%20a%20Multi-Architecture%20Kubernetes%20Cluster&amp;url=https%3a%2f%2fjoaobi.github.io%2fblog%2fpost%2fmultiarchk8s%2f" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-gplus" href="https://plus.google.com/share?url=https%3a%2f%2fjoaobi.github.io%2fblog%2fpost%2fmultiarchk8s%2f" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" title=""></a>
+    </li>
+    <li>
+        <a class="icon-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=https%3a%2f%2fjoaobi.github.io%2fblog%2fpost%2fmultiarchk8s%2f&title=Setting%20up%20a%20Multi-Architecture%20Kubernetes%20Cluster" onclick="window.open(this.href, 'linkedin-share', 'width=600,height=494');return false;" title=""></a>
+    </li>
+</ul>
+
+        </article>
+        <div class="comments">
+            <h3></h3>
+            
+        </div>
+    </main>
+    <aside class="author">
+  <img class="profile-image" src="https://joaobi.github.io/blog/img/joaobi-avatar.png" alt="Joao Bilhim (JB)" />
+  <p class="name"> 
+  <strong>Joao Bilhim (JB)</strong></p>
+  <p class="address">Occasionaly in Singapore, often somewhere else...</p>
+  <p class="link"></p>
+  <ul class="social">
+    
+<li><a href="//twitter.com/joaobi" class="icon-twitter" target="_blank" title="Twitter"></a></li>
+
+
+
+
+
+<li><a href="//linkedin.com/in/joaobi" class="icon-linkedin" target="_blank" title="Linkedin"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//github.com/joaobi" class="icon-github" target="_blank" title="Github"></a></li>
+
+
+
+
+<li><a href="https://joaobi.github.io/blog/post/index.xml" class="icon-rss" target="_blank" title="RSS"></a></li>
+
+  </ul>
+  <br><br>
+</aside>
+
+</div>
+
+<footer class="main-footer">
+  <div class="container clearfix">
+        <a class="icon-rss" href="https://joaobi.github.io/blog/post/index.xml" title="RSS"></a>
+        <p>&copy; 2018 &middot; Powered by <a href="http://gohugo.io">Hugo</a>.</p>
+  </div>
+</footer>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.8.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+<script>window.jQuery || document.write('<script src="https:\/\/joaobi.github.io\/blog\/js\/vendor\/jquery-1.11.0.min.js"><\/script>')</script>
+<script src="https://joaobi.github.io/blog/js/plugins.js"></script>
+
+
+
+
+</body>
+</html>
+
