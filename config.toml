@@ -1,6 +1,7 @@
-baseurl = "http://localhost:81"
+#baseurl = "http://localhost:81"
+baseurl = "https://joaobi.github.io/blog/"
 languageCode = "en-us"
-title = "Joao Bilhim's blog"
+title = "Joao Bilhim's (JB) blog"
 # Define how many pages appear per site
 paginate = 10
 # Enable comments powered by Disqus by entering your disqus shortname
@@ -14,12 +15,12 @@ theme = "hugo-minimalist-theme"
 #hemesDir = "../.."
 
 [params]
-    site_author = "Joao Bilhim"
+    site_author = "Joao Bilhim (JB)"
     site_description = "The awesome blog of John Doe."
     location = "Occasionaly in Singapore, often somewhere else..."
     # Link custom assets relative to /static
     avatar = "img/joaobi-avatar.png"
-    header_background = "img/desk.jpg"
+    header_background = "img/lights.png"
     header_title = "Curiosity sparks growth"
     copyright = "Powered by [Hugo](http://gohugo.io)."
     custom_css = []
